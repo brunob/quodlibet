@@ -64,6 +64,10 @@ INITIAL = {
         "album_sort": "0", # album sorting mode, default is title
         "album_covers": "1", # album cover display, on/off
         "album_substrings": "1", # include substrings in inline search
+        "album_text": "true", # album text display, on/off
+        "row_spacing": "6", # coverview row spacing
+        "column_spacing": "6", # coverview column spacing
+        "item_padding": "6", # coverview item padding
         "collection_headers": "~people 0",
         "radio": "", # radio filter selection
         "rating_click": "true", # click to rate song, on/off
