@@ -31,8 +31,8 @@ from quodlibet.qltk.information import Information
 from quodlibet.qltk.properties import SongProperties
 from quodlibet.qltk.songsmenu import SongsMenu
 from quodlibet.qltk.views import AllTreeView
-from quodlibet.qltk.x import MenuItem, Alignment, ScrolledWindow, RadioMenuItem
-from quodlibet.qltk.x import SymbolicIconImage, SeparatorMenuItem
+from quodlibet.qltk.x import MenuItem, Align, ScrolledWindow, RadioMenuItem
+from quodlibet.qltk.x import SymbolicIconImage
 from quodlibet.qltk.searchbar import SearchBarBox
 from quodlibet.qltk.menubutton import MenuButton
 from quodlibet.util import copool, connect_destroy
@@ -216,7 +216,7 @@ class PreferencesButton(Gtk.HBox):
         return compare_rating(a1, a2)
 
 
-class CoverGrid(Browser, Gtk.VBox, util.InstanceTracker, VisibleUpdate):
+class CoverGrid(Browser, util.InstanceTracker, VisibleUpdate):
     __gsignals__ = Browser.__gsignals__
     __model = None
     __last_render = None
@@ -300,6 +300,8 @@ class CoverGrid(Browser, Gtk.VBox, util.InstanceTracker, VisibleUpdate):
 
     def __init__(self, library):
         super(CoverGrid, self).__init__(spacing=6)
+        self.set_orientation(Gtk.Orientation.VERTICAL)
+
         self._register_instance()
         if self.__model is None:
             self._init_model(library)
@@ -403,7 +405,7 @@ class CoverGrid(Browser, Gtk.VBox, util.InstanceTracker, VisibleUpdate):
 
         prefs = PreferencesButton(self, model_sort)
         search.pack_start(prefs, False, True, 0)
-        self.pack_start(Alignment(search, left=6, top=6), False, True, 0)
+        self.pack_start(Align(search, left=6, top=6), False, True, 0)
         self.pack_start(sw, True, True, 0)
 
         self.connect("destroy", self.__destroy)
@@ -505,14 +507,16 @@ class CoverGrid(Browser, Gtk.VBox, util.InstanceTracker, VisibleUpdate):
             view.select_path(current_path)
             albums = self.__get_selected_albums()
             songs = self.__get_songs_from_albums(albums)
-            menu = SongsMenu(library, songs, parent=self)
+
+            items = []
             num = len(albums)
             button = MenuItem(
                 ngettext("Reload album _cover", "Reload album _covers", num),
                 Gtk.STOCK_REFRESH)
             button.connect('activate', self.__refresh_album, view)
-            menu.prepend(SeparatorMenuItem())
-            menu.prepend(button)
+            items.append(button)
+
+            menu = SongsMenu(library, songs, items=[items])
             menu.show_all()
             menu.popup(None, None, None, event.button, event.time, Gtk.get_current_event_time())
 
