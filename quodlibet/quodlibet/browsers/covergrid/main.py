@@ -43,7 +43,6 @@ from quodlibet.qltk.cover import get_no_cover_pixbuf
 from quodlibet.qltk.image import (get_pbosf_for_pixbuf, get_scale_factor,
     set_renderer_from_pbosf, add_border_widget)
 
-
 PATTERN_FN = os.path.join(const.USERDIR, "album_pattern")
 
 
@@ -607,10 +606,31 @@ class CoverGrid(Browser, util.InstanceTracker, VisibleUpdate):
         model = self.view.get_model()
         return [row[0].key for row in model if row[0]]
 
+    def select_by_func(self, func, scroll=True, one=False):
+        model = self.view.get_model()
+        if not model:
+            return False
+
+        selection = self.view.get_selected_items()
+        first = True
+        for row in model:
+            if func(row):
+                if not first:
+                    selection.select_path(row.path)
+                    continue
+                self.view.unselect_all()
+                self.view.select_path(row.path)
+                self.view.set_cursor(row.path, None, False)
+                if scroll:
+                    self.view.scroll_to_path(row.path, True, 0.5, 0.5)
+                first = False
+                if one:
+                    break
+        return not first
+
     def filter_albums(self, values):
-        view = self.view
         self.__inhibit()
-        changed = view.select_by_func(lambda r: r[0] and r[0].key in values)
+        changed = self.select_by_func(lambda r: r[0] and r[0].key in values)
         self.__uninhibit()
         if changed:
             self.activate()
