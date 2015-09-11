@@ -15,7 +15,8 @@ import os
 from gi.repository import Gtk, Pango, Gdk, GLib, Gio
 
 from .prefs import Preferences, PATTERN
-from quodlibet.browsers.albums.models import AlbumModel, AlbumFilterModel, AlbumSortModel
+from quodlibet.browsers.albums.models import (AlbumModel, AlbumFilterModel,
+    AlbumSortModel)
 from quodlibet.browsers.albums.main import VisibleUpdate
 
 from quodlibet import config
@@ -259,9 +260,12 @@ class CoverGrid(Browser, util.InstanceTracker, VisibleUpdate):
     @classmethod
     def refresh_view(klass):
         for covergrid in klass.instances():
-            covergrid.view.set_row_spacing(config.getint("browsers", "row_spacing"))
-            covergrid.view.set_column_spacing(config.getint("browsers", "column_spacing"))
-            covergrid.view.set_item_padding(config.getint("browsers", "item_padding"))
+            covergrid.view.set_row_spacing(config.getint("browsers",
+                "row_spacing"))
+            covergrid.view.set_column_spacing(config.getint("browsers",
+                "column_spacing"))
+            covergrid.view.set_item_padding(config.getint("browsers",
+                "item_padding"))
             covergrid.view.queue_resize()
 
     @classmethod
@@ -314,7 +318,8 @@ class CoverGrid(Browser, util.InstanceTracker, VisibleUpdate):
         self.view = view = Gtk.IconView(model_filter)
         #view.set_item_width(Album.COVER_SIZE + 12)
         self.view.set_row_spacing(config.getint("browsers", "row_spacing", 6))
-        self.view.set_column_spacing(config.getint("browsers", "column_spacing", 6))
+        self.view.set_column_spacing(config.getint("browsers",
+            "column_spacing", 6))
         self.view.set_item_padding(config.getint("browsers", "item_padding", 6))
         self.view.set_has_tooltip(True)
         self.view.connect("query-tooltip", self._show_tooltip)
@@ -517,7 +522,8 @@ class CoverGrid(Browser, util.InstanceTracker, VisibleUpdate):
 
             menu = SongsMenu(library, songs, items=[items])
             menu.show_all()
-            menu.popup(None, None, None, event.button, event.time, Gtk.get_current_event_time())
+            menu.popup(None, None, None, event.button, event.time,
+                Gtk.get_current_event_time())
 
     def _show_tooltip(self, widget, x, y, keyboard_tip, tooltip):
         w = self.scrollwin.get_hadjustment().get_value()
@@ -530,7 +536,8 @@ class CoverGrid(Browser, util.InstanceTracker, VisibleUpdate):
         album = model.get_album(iter)
         if album is None:
             text = "<b>%s</b>" % _("All Albums")
-            text += "\n" + ngettext("%d album", "%d albums", len(model) - 1) % (len(model) - 1)
+            text += "\n" + ngettext("%d album",
+                "%d albums", len(model) - 1) % (len(model) - 1)
             markup = text
         else:
             markup = CoverGrid._pattern % album
