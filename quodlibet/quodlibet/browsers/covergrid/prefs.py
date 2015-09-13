@@ -85,62 +85,6 @@ class Preferences(qltk.UniqueWindow):
                    lambda s: browser.toggle_text())
         vbox.pack_start(cb, False, True, 0)
 
-        row_spacing = config.getint("browsers", "row_spacing", 6)
-        adj = Gtk.Adjustment.new(row_spacing, 0, 30, 1, 1, 0)
-        rs_spin = Gtk.SpinButton(adjustment=adj)
-        rs_spin.set_digits(0)
-        rs_spin.set_numeric(True)
-        rs_spin.connect('changed', self.__changed, 'browsers', 'row_spacing', browser)
-        rs_label = Gtk.Label(label=_("_Row spacing:"))
-        rs_label.set_use_underline(True)
-        rs_label.set_mnemonic_widget(rs_spin)
-        
-        column_spacing = config.getint("browsers", "column_spacing", 6)
-        adj = Gtk.Adjustment.new(column_spacing, 0, 30, 1, 1, 0)
-        cs_spin = Gtk.SpinButton(adjustment=adj)
-        cs_spin.set_digits(0)
-        cs_spin.set_numeric(True)
-        cs_spin.connect('changed', self.__changed, 'browsers', 'column_spacing', browser)
-        cs_label = Gtk.Label(label=_("_Column spacing:"))
-        cs_label.set_use_underline(True)
-        cs_label.set_mnemonic_widget(cs_spin)
-        
-        item_padding = config.getint("browsers", "item_padding", 6)
-        adj = Gtk.Adjustment.new(item_padding, 0, 30, 1, 1, 0)
-        ip_spin = Gtk.SpinButton(adjustment=adj)
-        ip_spin.set_digits(0)
-        ip_spin.set_numeric(True)
-        ip_spin.connect('changed', self.__changed, 'browsers', 'item_padding', browser)
-        ip_label = Gtk.Label(label=_("_Item padding:"))
-        ip_label.set_use_underline(True)
-        ip_label.set_mnemonic_widget(ip_spin)
-
-        # packing
-        table = Gtk.Table.new(3, 3, False)
-        table.set_col_spacings(6)
-        table.set_row_spacings(6)
-
-        rs_label.set_alignment(0, 0.5)
-        table.attach(rs_label, 0, 1, 0, 1, xoptions=0)
-        cs_label.set_alignment(0, 0.5)
-        table.attach(cs_label, 0, 1, 1, 2, xoptions=0)
-        ip_label.set_alignment(0, 0.5)
-        table.attach(ip_label, 0, 1, 2, 3, xoptions=0)
-
-        rs_align = Gtk.Alignment.new(0, 0.5, 0, 1)
-        rs_align.add(rs_spin)
-        table.attach(rs_align, 1, 2, 0, 1)
-
-        cs_align = Gtk.Alignment.new(0, 0.5, 0, 1)
-        cs_align.add(cs_spin)
-        table.attach(cs_align, 1, 2, 1, 2)
-        
-        ip_align = Gtk.Alignment.new(0, 0.5, 0, 1)
-        ip_align.add(ip_spin)
-        table.attach(ip_align, 1, 2, 2, 3)
-
-        vbox.pack_start(table, False, True, 0)
-
         f = qltk.Frame(_("Options"), child=vbox)
         box.pack_start(f, False, True, 12)
 
