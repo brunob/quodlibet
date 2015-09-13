@@ -657,14 +657,30 @@ class CoverGrid(Browser, util.InstanceTracker, VisibleUpdate):
 
     def restore(self):
         text = config.get("browsers", "query_text").decode("utf-8")
-        #entry = self.__search
-        #entry.set_text(text)
+        entry = self.__search
+        entry.set_text(text)
 
         # update_filter expects a parsable query
-        #if Query.is_parsable(text):
-        #    self.__update_filter(entry, text, scroll_up=False, restore=True)
+        if Query.is_parsable(text):
+            self.__update_filter(entry, text, scroll_up=False, restore=True)
 
-        keys = config.get("browsers", "albums").split("\n")
+        keys = config.get("browsers", "covergrid").split("\n")
+
+        # FIXME: If albums is "" then it could be either all albums or
+        # no albums. If it's "" and some other stuff, assume no albums,
+        # otherwise all albums.
+        self.__inhibit()
+        if keys == [""]:
+            self.view.set_cursor((0,))
+        else:
+
+            def select_fun(row):
+                album = row[0]
+                if not album:  # all
+                    return False
+                return album.str_key in keys
+            self.select_by_func(select_fun)
+        self.__uninhibit()
 
     def scroll(self, song):
         album_key = song.album_key
@@ -690,7 +706,7 @@ class CoverGrid(Browser, util.InstanceTracker, VisibleUpdate):
 
     def save(self):
         conf = self.__get_config_string()
-        config.set("browsers", "albums", conf)
+        config.set("browsers", "covergrid", conf)
         text = self.__search.get_text().encode("utf-8")
         config.set("browsers", "query_text", text)
 
