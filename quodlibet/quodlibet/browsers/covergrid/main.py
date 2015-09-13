@@ -256,17 +256,6 @@ class CoverGrid(Browser, util.InstanceTracker, VisibleUpdate):
         for covergrid in klass.instances():
             covergrid.__text_cells.set_visible(on)
             covergrid.view.queue_resize()
-    
-    @classmethod
-    def refresh_view(klass):
-        for covergrid in klass.instances():
-            covergrid.view.set_row_spacing(config.getint("browsers",
-                "row_spacing"))
-            covergrid.view.set_column_spacing(config.getint("browsers",
-                "column_spacing"))
-            covergrid.view.set_item_padding(config.getint("browsers",
-                "item_padding"))
-            covergrid.view.queue_resize()
 
     @classmethod
     def refresh_pattern(klass, pattern_text):

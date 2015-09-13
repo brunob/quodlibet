@@ -143,7 +143,3 @@ class Preferences(qltk.UniqueWindow):
         else:
             edit.apply.set_sensitive(True)
         label.set_markup(text)
-
-    def __changed(self, adj, section, name, browser):
-        config.set(section, name, int(adj.get_value()))
-        browser.refresh_view()
