@@ -674,7 +674,7 @@ class CoverGrid(Browser, util.InstanceTracker, VisibleUpdate):
     def scroll(self, song):
         album_key = song.album_key
         select = lambda r: r[0] and r[0].key == album_key
-        self.view.select_by_func(select, one=True)
+        self.select_by_func(select, one=True)
 
     def __get_config_string(self):
         model = self.view.get_model()
